@@ -4,6 +4,7 @@ import ContactDetails from './ContactDetails';
 import ContactCreate from './ContactCreate';
 
 import update from 'react-addons-update';
+import { join } from 'path';
 
 export default class Contact extends React.Component {
   constructor(props) {
@@ -37,6 +38,24 @@ export default class Contact extends React.Component {
     this._handleCreate = this._handleCreate.bind(this);
     this._handleRemove = this._handleRemove.bind(this);
     this._handleEdit = this._handleEdit.bind(this);
+  }
+
+  componentWillMount() {
+    const contactData = localStorage.contactData;
+    if (contactData) {
+      this.setState({
+        contactData: JSON.parse(contactData),
+      });
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (
+      JSON.stringify(prevState.contactData) !=
+      JSON.stringify(this.state.contactData)
+    ) {
+      localStorage.contactData = JSON.stringify(this.state.contactData);
+    }
   }
 
   _handleCreate(contact) {
